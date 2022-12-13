@@ -145,9 +145,8 @@ class Usecase1:
         self.__logged = False
 
     def reset(self):
-        dashboard_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]')
-        dashboard_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
 
     def find_element(self, by, value):
         return WebDriverWait(self.__driver, 50).until(

@@ -144,17 +144,14 @@ class Boundary:
             self.__logged = True
 
         # run test
-        site_admin_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]')
-        site_admin_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]').click()
 
-        grades_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="#linkgrades"]')
-        grades_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="#linkgrades"]').click()
 
-        general__settings_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/settings.php?section=gradessettings"]')
-        general__settings_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/settings.php?section=gradessettings"]').click()
 
         grade_point_maximum_input = self.find_element(
             by=By.NAME, value='s__gradepointmax')
@@ -167,9 +164,8 @@ class Boundary:
         grade_point_default_input.clear()
         grade_point_default_input.send_keys(1)
 
-        submit_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.row button')
-        submit_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='.row button').click()
 
         return current
 
@@ -182,9 +178,8 @@ class Boundary:
         self.__logged = False
 
     def reset(self):
-        dashboard_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]')
-        dashboard_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
 
     def find_element(self, by, value):
         return WebDriverWait(self.__driver, 5).until(

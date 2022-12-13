@@ -63,6 +63,7 @@ class DecisionTable:
                         break
                 if (not have):
                     raise Exception()
+
             print("Test 2: PASS")
         except:
             print("Test 2: FAIL")
@@ -263,6 +264,12 @@ class DecisionTable:
         self.find_element(
             by=By.XPATH, value="//a[contains(text(),'" + sort + "')]").click()
 
+        try:
+            self.find_element(
+                by=By.CSS_SELECTOR, value='button[data-action="more-events"]').click()
+        except:
+            pass
+
     def setup_data(self):
         # login
         if (not self.__logged):
@@ -423,14 +430,18 @@ class DecisionTable:
         self.__logged = False
 
     def reset(self):
-        dashboard_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]')
-        dashboard_btn.click()
+        self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
 
     def find_element(self, by, value):
-        return WebDriverWait(self.__driver, 50).until(
+        return WebDriverWait(self.__driver, 1).until(
             EC.presence_of_element_located((by, value)))
 
     def find_elements(self, by, value):
-        return WebDriverWait(self.__driver, 2).until(
-            EC.presence_of_all_elements_located((by, value)))
+        WebDriverWait(self.__driver, 1).until(
+            EC.visibility_of_element_located((by, value)))
+
+        elements = self.__driver.find_elements(
+            by, value)
+
+        return [element for element in elements]
