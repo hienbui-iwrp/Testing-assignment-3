@@ -96,18 +96,7 @@ class Usecase1(TestCase):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
         for course in USECASE1_DATA:
-            # go to add course
-            self.find_element(
-                by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]').click()
-            self.find_element(by=By.LINK_TEXT, value='Courses').click()
-            self.find_element(
-                by=By.LINK_TEXT, value='Add a new course').click()
-
-            # add course
-            self.find_element(by=By.ID, value='id_fullname').send_keys(
-                USECASE1_DATA[course]['full name'])
-            self.find_element(by=By.ID, value='id_shortname').send_keys(
-                USECASE1_DATA[course]['short name'])
-            self.find_element(by=By.NAME, value='saveanddisplay').click()
+            self.add_course(
+                USECASE1_DATA[course]['full name'], USECASE1_DATA[course]['short name'])
 
         self.reset()

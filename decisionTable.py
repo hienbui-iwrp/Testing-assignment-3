@@ -275,18 +275,9 @@ class DecisionTable(TestCase):
         if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
-        # go to add course
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]').click()
-        self.find_element(by=By.LINK_TEXT, value='Courses').click()
-        self.find_element(by=By.LINK_TEXT, value='Add a new course').click()
-
         # add course
-        self.find_element(by=By.ID, value='id_fullname').send_keys(
-            DECISION_TABLE_DATA['course']['full name'])
-        self.find_element(by=By.ID, value='id_shortname').send_keys(
-            DECISION_TABLE_DATA['course']['short name'])
-        self.find_element(by=By.NAME, value='saveanddisplay').click()
+        self.add_course(
+            DECISION_TABLE_DATA['course']['full name'], DECISION_TABLE_DATA['course']['short name'])
 
         self.go_to_course(DECISION_TABLE_DATA['course']['full name'], True)
 

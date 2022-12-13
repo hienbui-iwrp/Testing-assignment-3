@@ -143,49 +143,6 @@ class EquivalentClass(TestCase):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
         # go to add user
-        site_admin_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]')
-        site_admin_btn.click()
-
-        users_btn = self.find_element(
-            by=By.LINK_TEXT, value='Users')
-        users_btn.click()
-
-        add_btn = self.find_element(
-            by=By.LINK_TEXT, value='Add a new user')
-        add_btn.click()
-
-        # add user
-        username_input = self.find_element(
-            by=By.NAME, value='username')
-        username_input.clear()
-        username_input.send_keys(EQUIVALENT_CLASS_DATA['username'])
-
-        password_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.form-control[data-passwordunmask="edit"]')
-        password_btn.click()
-
-        newpassword_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.NAME, "newpassword")))
-        newpassword_input.clear()
-        newpassword_input.send_keys(EQUIVALENT_CLASS_DATA['password'])
-
-        firstname_input = self.find_element(
-            by=By.NAME, value='firstname')
-        firstname_input.clear()
-        firstname_input.send_keys(EQUIVALENT_CLASS_DATA['first name'])
-
-        lastname_input = self.find_element(
-            by=By.NAME, value='lastname')
-        lastname_input.clear()
-        lastname_input.send_keys(EQUIVALENT_CLASS_DATA['surname'])
-
-        email_input = self.find_element(by=By.NAME, value='email')
-        email_input.clear()
-        email_input.send_keys(EQUIVALENT_CLASS_DATA['email'])
-
-        submit_btn = self.find_element(
-            by=By.NAME, value='submitbutton')
-        submit_btn.click()
-
+        self.add_user(EQUIVALENT_CLASS_DATA['username'],
+                      EQUIVALENT_CLASS_DATA['password'], EQUIVALENT_CLASS_DATA['first name'], EQUIVALENT_CLASS_DATA['surname'], EQUIVALENT_CLASS_DATA['email'])
         self.logout()
