@@ -21,7 +21,6 @@ class Usecase2(TestCase):
         # self.test_1()
 
         self.logout()
-        self.find_element(by=By.CLASS_NAME, value='asdas')
         print('--------------------------------')
 
     def test_1(self):
@@ -47,16 +46,16 @@ class Usecase2(TestCase):
             self.login(ADMIN_ACCOUNT['username'],
                        ADMIN_ACCOUNT['password'])
 
-        # run test
-        self.find_element(
-            By.CSS_SELECTOR, 'button[title="Filter timeline by date"]').click()
-        self.find_element(
-            by=By.XPATH, value="//a[contains(text(),'" + filter + "')]").click()
+            # run test
+            self.find_element(
+                By.CSS_SELECTOR, 'button[title="Filter timeline by date"]').click()
+            self.find_element(
+                by=By.XPATH, value="//a[contains(text(),'" + filter + "')]").click()
 
-        self.find_element(
-            By.CSS_SELECTOR, 'button[title="Sort timeline items"]').click()
-        self.find_element(
-            by=By.XPATH, value="//a[contains(text(),'" + sort + "')]").click()
+            self.find_element(
+                By.CSS_SELECTOR, 'button[title="Sort timeline items"]').click()
+            self.find_element(
+                by=By.XPATH, value="//a[contains(text(),'" + sort + "')]").click()
 
     def setup_data(self):
         # login
@@ -64,85 +63,15 @@ class Usecase2(TestCase):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
         # go to add user
-        site_admin_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]')
-        site_admin_btn.click()
-
-        users_btn = self.find_element(
-            by=By.LINK_TEXT, value='Users')
-        users_btn.click()
-
-        add_btn = self.find_element(
-            by=By.LINK_TEXT, value='Add a new user')
-        add_btn.click()
-
-        # add user
-        username_input = self.find_element(
-            by=By.NAME, value='username')
-        username_input.clear()
-        username_input.send_keys(USECASE2_DATA['account']['username'])
-
-        password_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.form-control[data-passwordunmask="edit"]')
-        password_btn.click()
-
-        newpassword_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.NAME, "newpassword")))
-        newpassword_input.clear()
-        newpassword_input.send_keys(USECASE2_DATA['account']['password'])
-
-        firstname_input = self.find_element(
-            by=By.NAME, value='firstname')
-        firstname_input.clear()
-        firstname_input.send_keys(USECASE2_DATA['account']['first name'])
-
-        lastname_input = self.find_element(
-            by=By.NAME, value='lastname')
-        lastname_input.clear()
-        lastname_input.send_keys(USECASE2_DATA['account']['surname'])
-
-        email_input = self.find_element(by=By.NAME, value='email')
-        email_input.clear()
-        email_input.send_keys(USECASE2_DATA['account']['email'])
-
-        submit_btn = self.find_element(
-            by=By.NAME, value='submitbutton')
-        submit_btn.click()
+        self.add_user(USECASE2_DATA['account']['username'], USECASE2_DATA['account']['password'], USECASE2_DATA['account']
+                      ['first name'], USECASE2_DATA['account']['surname'], USECASE2_DATA['account']['email'])
 
         # go to add course
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]').click()
-        self.find_element(by=By.LINK_TEXT, value='Courses').click()
-        self.find_element(by=By.LINK_TEXT, value='Add a new course').click()
-
-        # add course
-        self.find_element(by=By.ID, value='id_fullname').send_keys(
-            USECASE2_DATA['course']['full name'])
-        self.find_element(by=By.ID, value='id_shortname').send_keys(
-            USECASE2_DATA['course']['short name'])
-        self.find_element(by=By.NAME, value='saveanddisplay').click()
+        self.add_course(
+            USECASE2_DATA['course']['full name'], USECASE2_DATA['course']['short name'])
 
         # go to course
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
-        try:
-            self.driver.implicitly_wait(2)
-            WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'I understand')]"))).click()
-        except:
-            pass
-        course = self.find_element(
-            by=By.XPATH, value="//span[contains(text(),'" + USECASE2_DATA['course']['full name'] + "')]")
-        course.find_element(by=By.XPATH, value='..').click()
-
-        # turn on edit mode
-        self.find_element(by=By.NAME, value='setmode').click()
-        try:
-            self.driver.implicitly_wait(2)
-            WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Skip tour')]"))).click()
-        except:
-            pass
+        self.go_to_course(USECASE2_DATA['course']['full name'], True)
 
         topic = 1
         # add quiz
@@ -234,32 +163,34 @@ class Usecase2(TestCase):
         self.find_element(by=By.LINK_TEXT, value='Participants').click()
         self.find_element(by=By.CSS_SELECTOR,
                           value='input[value="Enrol users"]').click()
-
         search_input = self.find_element(
             by=By.CSS_SELECTOR, value='.modal-content input[placeholder="Search"]')
         search_input.send_keys(USECASE2_DATA['account']['email'])
-        self.find_element(
-            by=By.CSS_SELECTOR, value='.modal-content li').click()
+        try:
+            self.find_element(
+                by=By.CSS_SELECTOR, value='.modal-content li').click()
+        except:
+            pass
+
+        self.wait(1)
 
         self.find_element(by=By.CSS_SELECTOR,
                           value='button[data-action="save"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-action="save"]').click()
+
         self.logout()
         self.login(USECASE2_DATA['account']['username'],
                    USECASE2_DATA['account']['password'])
 
         # do quiz
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
-        course = self.find_element(
-            by=By.XPATH, value="//span[contains(text(),'" + USECASE2_DATA['course']['full name'] + "')]")
-        course.find_element(by=By.XPATH, value='..').click()
+        self.go_to_course(USECASE2_DATA['course']['full name'])
         list_quiz = self.find_elements(by=By.LINK_TEXT, value=quizs[2])
-        list_quiz[-1].click()
-        self.find_elements(by=By.CSS_SELECTOR,
-                           value='button[type="submit"]').click()
-        self.find_elements(by=By.CSS_SELECTOR,
-                           value='input[type="submit"]').click()
-        self.find_elements(by=By.LINK_TEXT,
-                           value='Submit all and finish').click()
+
+        list_quiz[-1].find_element(By.XPATH, '..').click()
+        self.find_element(by=By.CSS_SELECTOR,
+                          value='button[type="submit"]').click()
+        self.find_element(by=By.CSS_SELECTOR,
+                          value='input[type="submit"]').click()
+        self.find_element(by=By.XPATH,
+                          value="//button[contains(text(),'Submit all and finish')]").click()
+        self.find_element(by=By.CSS_SELECTOR,
+                          value='input[value="Submit all and finish"]').click()
