@@ -11,7 +11,7 @@ from testcase import *
 
 class Usecase2(TestCase):
     def __init__(self, driver):
-        pass
+        super().__init__(driver)
 
     def run_all_test(self):
         print('--------------------------------')

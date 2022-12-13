@@ -8,8 +8,7 @@ from testcase import *
 
 class EquivalentClass(TestCase):
     def __init__(self, driver):
-        self.driver = driver
-        self.logged = False
+        super().__init__(driver)
 
     def run_all_test(self):
         print('--------------------------------')

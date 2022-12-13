@@ -67,19 +67,36 @@ The password must have at least 1 special character(s) such as as *, -, or #.'''
 # decision table
 DECISION_TABLE_DATA = {
     'course': {'full name': 'Môn 4', 'short name': 'Môn 4'},
-    'overdue': {'name': 'project 1',
-                'allow submission': {'day': 23, 'month': 11, 'year': 2022},
-                'due date': {'day': 24, 'month': 11, 'year': 2022}},
-    '7 dates': {'name': 'project 2', },
-    '30 dates': {'name': 'project 3',
-                 'due date': {'day': 25, 'month': 12, 'year': 2022},
-                 'remind': {'day': 26, 'month': 12, 'year': 2022}},
-    '3 months': {'name': 'project 4',
-                 'due date': {'day': 2, 'month': 2, 'year': 2023},
-                 'remind': {'day': 3, 'month': 2, 'year': 2023}},
-    '6 months': {'name': 'project 5',
-                 'due date': {'day': 2, 'month': 5, 'year': 2023},
-                 'remind': {'day': 3, 'month': 5, 'year': 2023}},
+    'events': [
+        {
+            'name': 'project 1',
+            'allow submission': {'day': 23, 'month': 11, 'year': 2022},
+            'due date': {'day': 24, 'month': 11, 'year': 2022},
+            'topic': 1,
+        },
+        {
+            'name': 'project 2',
+            'topic': 2,
+        },
+        {
+            'name': 'project 3',
+            'due date': {'day': 25, 'month': 12, 'year': 2022},
+            'remind': {'day': 26, 'month': 12, 'year': 2022},
+            'topic': 3,
+        },
+        {
+            'name': 'project 4',
+            'due date': {'day': 2, 'month': 2, 'year': 2023},
+            'remind': {'day': 3, 'month': 2, 'year': 2023},
+            'topic': 4,
+        },
+        {
+            'name': 'project 5',
+            'due date': {'day': 2, 'month': 5, 'year': 2023},
+            'remind': {'day': 3, 'month': 5, 'year': 2023},
+            'topic': 4,
+        },
+    ]
 }
 
 DECISION_TABLE_TESTCASE = {

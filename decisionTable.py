@@ -8,7 +8,7 @@ from testcase import *
 
 class DecisionTable(TestCase):
     def __init__(self, driver):
-        pass
+        super().__init__(driver)
 
     def run_all_test(self):
         print('--------------------------------')
@@ -249,7 +249,7 @@ class DecisionTable(TestCase):
             print("Test 12: FAIL")
 
     def run_test(self, filter, sort):
-        if (not self.__logged):
+        if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'],
                        ADMIN_ACCOUNT['password'])
 
@@ -272,7 +272,7 @@ class DecisionTable(TestCase):
 
     def setup_data(self):
         # login
-        if (not self.__logged):
+        if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
         # go to add course
@@ -287,118 +287,43 @@ class DecisionTable(TestCase):
         self.find_element(by=By.ID, value='id_shortname').send_keys(
             DECISION_TABLE_DATA['course']['short name'])
         self.find_element(by=By.NAME, value='saveanddisplay').click()
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
-        course = self.find_element(
-            by=By.XPATH, value="//span[contains(text(),'Môn 4')]")
-        course.find_element(by=By.XPATH, value='..').click()
 
-        # turn on edit mode
-        self.find_element(by=By.NAME, value='setmode').click()
-        try:
-            WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Skip tour')]"))).click()
-        except:
-            pass
+        self.go_to_course(DECISION_TABLE_DATA['course']['full name'], True)
 
-        # add event 1
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="1"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['overdue']['name'])
-        self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_day').send_keys(
-            DECISION_TABLE_DATA['overdue']['allow submission']['day'])
-        self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_month').send_keys(
-            DECISION_TABLE_DATA['overdue']['allow submission']['month'])
-        self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_year').send_keys(
-            DECISION_TABLE_DATA['overdue']['allow submission']['year'])
+        # add event
+        for event in DECISION_TABLE_DATA['events']:
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='button[data-sectionid="' + str(event['topic']) + '"]').click()
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='a[title="Add a new Assignment"]').click()
 
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['overdue']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['overdue']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['overdue']['due date']['year'])
+            # input data
+            self.find_element(by=By.NAME, value='name').send_keys(
+                event['name'])
+            if 'allow submission' in event:
+                self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_day').send_keys(
+                    event['allow submission']['day'])
+                self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_month').send_keys(
+                    event['allow submission']['month'])
+                self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_year').send_keys(
+                    event['allow submission']['year'])
 
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
+            if 'due date' in event:
+                self.find_element(by=By.ID, value='id_duedate_day').send_keys(
+                    event['due date']['day'])
+                self.find_element(by=By.ID, value='id_duedate_month').send_keys(
+                    event['due date']['month'])
+                self.find_element(by=By.ID, value='id_duedate_year').send_keys(
+                    event['due date']['year'])
 
-        # add event 2
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="2"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['7 dates']['name'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
+            if 'remind' in event:
+                self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
+                    event['remind']['day'])
+                self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
+                    event['remind']['month'])
+                self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
+                    event['remind']['year'])
 
-        # add event 3
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="3"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['30 dates']['name'])
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['30 dates']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['30 dates']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['30 dates']['due date']['year'])
-        self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-            DECISION_TABLE_DATA['30 dates']['remind']['day'])
-        self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-            DECISION_TABLE_DATA['30 dates']['remind']['month'])
-        self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-            DECISION_TABLE_DATA['30 dates']['remind']['year'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        # add event 4
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="4"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['3 months']['name'])
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['3 months']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['3 months']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['3 months']['due date']['year'])
-        self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-            DECISION_TABLE_DATA['3 months']['remind']['day'])
-        self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-            DECISION_TABLE_DATA['3 months']['remind']['month'])
-        self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-            DECISION_TABLE_DATA['3 months']['remind']['year'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        # add event 5
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="4"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['6 months']['name'])
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['6 months']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['6 months']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['6 months']['due date']['year'])
-        self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-            DECISION_TABLE_DATA['6 months']['remind']['day'])
-        self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-            DECISION_TABLE_DATA['6 months']['remind']['month'])
-        self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-            DECISION_TABLE_DATA['6 months']['remind']['year'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
+            self.find_element(by=By.ID, value='id_submitbutton2').click()
 
         self.reset()

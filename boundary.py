@@ -9,7 +9,6 @@ from testcase import *
 class Boundary(TestCase):
     def __init__(self, driver):
         super().__init__(driver)
-        print(self.logged)
 
     def run_all_test(self):
         print('--------------------------------')

@@ -55,7 +55,7 @@ class TestCase:
         course = self.find_element(
             by=By.XPATH, value="//span[contains(text(),'" + name + "')]")
         course.find_element(by=By.XPATH, value='..').click()
-        if(editmode):
+        if (editmode):
             self.find_element(by=By.NAME, value='setmode').click()
             try:
                 WebDriverWait(self.driver, 2).until(
@@ -68,11 +68,11 @@ class TestCase:
             by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
 
     def find_element(self, by, value):
-        return WebDriverWait(self.driver, 50).until(
+        return WebDriverWait(self.driver, 1).until(
             EC.presence_of_element_located((by, value)))
 
     def find_elements(self, by, value):
-        WebDriverWait(self.driver, 2).until(
+        WebDriverWait(self.driver, 1).until(
             EC.visibility_of_element_located((by, value)))
 
         elements = self.driver.find_elements(
