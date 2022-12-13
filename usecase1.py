@@ -17,14 +17,14 @@ class Usecase1(TestCase):
         print('Run Usecase 1 Test:')
 
         self.setup_data()
-        self.test_1()
-        self.test_2()
-        self.test_3()
+        self.path_1()
+        self.path_2()
+        self.path_3()
 
         self.logout()
         print('--------------------------------')
 
-    def test_1(self):
+    def path_1(self):
         try:
             if (not self.logged):
                 self.login(ADMIN_ACCOUNT['username'],
@@ -52,7 +52,7 @@ class Usecase1(TestCase):
 
         self.reset()
 
-    def test_2(self):
+    def path_2(self):
         try:
             if (not self.logged):
                 self.login(ADMIN_ACCOUNT['username'],
@@ -73,7 +73,7 @@ class Usecase1(TestCase):
 
         self.reset()
 
-    def test_3(self):
+    def path_3(self):
         try:
             if (not self.logged):
                 self.login(ADMIN_ACCOUNT['username'],

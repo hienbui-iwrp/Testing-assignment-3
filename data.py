@@ -166,3 +166,11 @@ USECASE2_DATA = {
     ],
     'question': {'name': 'Câu 1', 'text': 'Câu hỏi'}
 }
+
+
+USECASE2_EXPECT = {
+    'path 1': 'Finish attempt ...',
+    'path 2': 'Back to the course',
+    'path 3': 'Back to the course',
+    'path 4': 'Back to the course',
+}

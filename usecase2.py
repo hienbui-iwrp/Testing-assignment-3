@@ -18,44 +18,77 @@ class Usecase2(TestCase):
         print('Run Usecase 2 Test:')
 
         self.setup_data()
-        # self.test_1()
+        self.path_1()
+        self.path_2()
+        self.path_3()
+        self.path_4()
 
         self.logout()
         print('--------------------------------')
 
-    def test_1(self):
+    def path_1(self):
         try:
-            self.run_test(
-                filter=DECISION_TABLE_TESTCASE['test 1']['filter'], sort=DECISION_TABLE_TESTCASE['test 1']['sort'])
-            courses = self.find_elements(
-                by=By.CSS_SELECTOR, value='.event-name-container a')
-            for expect in DECISION_TABLE_EXPECT['test 1']:
-                have = False
-                for course in courses:
-                    if expect in course.text:
-                        have = True
-                        break
-                if (not have):
-                    raise Exception()
-            print("Test 1: PASS")
+            self.run_test(quiz=USECASE2_DATA['quizs'][2]['name'])
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='button[type="submit"]').click()
+
+            assert USECASE2_EXPECT['path 1'] in self.find_element(
+                by=By.CSS_SELECTOR, value='input[type="submit"]').get_attribute('value')
+
+            print("Path 1: PASS")
         except:
-            print("Test 1: FAIL")
+            print("Path 1: FAIL")
 
-    def run_test(self, filter, sort):
+        self.reset()
+
+    def path_2(self):
+        try:
+            self.run_test(quiz=USECASE2_DATA['quizs'][0]['name'])
+
+            assert USECASE2_EXPECT['path 2'] in self.find_element(
+                by=By.CSS_SELECTOR, value='button[type="submit"]').text
+
+            print("Path 2: PASS")
+        except:
+            print("Path 2: FAIL")
+
+        self.reset()
+
+    def path_3(self):
+        try:
+            self.run_test(quiz=USECASE2_DATA['quizs'][3]['name'])
+
+            assert USECASE2_EXPECT['path 3'] in self.find_element(
+                by=By.CSS_SELECTOR, value='button[type="submit"]').text
+
+            print("Path 3: PASS")
+        except:
+            print("Path 3: FAIL")
+
+        self.reset()
+
+    def path_4(self):
+        try:
+            self.run_test(quiz=USECASE2_DATA['quizs'][1]['name'])
+
+            self.wait(10)
+            assert USECASE2_EXPECT['path 4'] in self.find_element(
+                by=By.CSS_SELECTOR, value='button[type="submit"]').text
+
+            print("Path 4: PASS")
+        except:
+            print("Path 4: FAIL")
+
+        self.reset()
+
+    def run_test(self, quiz):
         if (not self.logged):
-            self.login(ADMIN_ACCOUNT['username'],
-                       ADMIN_ACCOUNT['password'])
+            self.login(USECASE2_DATA['account']['username'],
+                       USECASE2_DATA['account']['password'])
 
-            # run test
-            self.find_element(
-                By.CSS_SELECTOR, 'button[title="Filter timeline by date"]').click()
-            self.find_element(
-                by=By.XPATH, value="//a[contains(text(),'" + filter + "')]").click()
-
-            self.find_element(
-                By.CSS_SELECTOR, 'button[title="Sort timeline items"]').click()
-            self.find_element(
-                by=By.XPATH, value="//a[contains(text(),'" + sort + "')]").click()
+        self.go_to_course(USECASE2_DATA['course']['full name'])
+        list_quiz = self.find_elements(by=By.LINK_TEXT, value=quiz)
+        list_quiz[-1].find_element(By.XPATH, '..').click()
 
     def setup_data(self):
         # login
@@ -183,7 +216,7 @@ class Usecase2(TestCase):
 
         # do quiz
         self.go_to_course(USECASE2_DATA['course']['full name'])
-        list_quiz = self.find_elements(by=By.LINK_TEXT, value=quizs[2])
+        list_quiz = self.find_elements(by=By.LINK_TEXT, value=quizs[1])
 
         list_quiz[-1].find_element(By.XPATH, '..').click()
         self.find_element(by=By.CSS_SELECTOR,
@@ -194,3 +227,5 @@ class Usecase2(TestCase):
                           value="//button[contains(text(),'Submit all and finish')]").click()
         self.find_element(by=By.CSS_SELECTOR,
                           value='input[value="Submit all and finish"]').click()
+
+        self.logout()
