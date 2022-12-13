@@ -29,8 +29,8 @@ driver.get("http://localhost/")
 # run
 # boundary.run_all_test()
 # equivalentClass.run_all_test()
-decisionTable.run_all_test()
-# usecase1.run_all_test()
+# decisionTable.run_all_test()
+usecase1.run_all_test()
 # usecase2.run_all_test()
 
 driver.quit()

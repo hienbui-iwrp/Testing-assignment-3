@@ -62,7 +62,7 @@ class Usecase1(TestCase):
                 by=By.CSS_SELECTOR, value='a[href="http://localhost/?redirect=0"]').click()
 
             self.find_element(
-                by=By.XPATH, value="//a[contains(text(),'Môn 1')]").click()
+                by=By.XPATH, value="//a[contains(text(),'"+USECASE1_DATA['course 1']['full name']+"')]").click()
 
             assert USECASE1_EXPECT['test 1'] in self.find_element(
                 by=By.CSS_SELECTOR, value='h1.h2').text
@@ -79,12 +79,7 @@ class Usecase1(TestCase):
                 self.login(ADMIN_ACCOUNT['username'],
                            ADMIN_ACCOUNT['password'])
 
-            self.find_element(
-                by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
-
-            course = self.find_element(
-                by=By.XPATH, value="//span[contains(text(),'Môn 1')]")
-            course.find_element(by=By.XPATH, value='..').click()
+            self.go_to_course(USECASE1_DATA['course 1']['full name'])
 
             assert USECASE1_EXPECT['test 1'] in self.find_element(
                 by=By.CSS_SELECTOR, value='h1.h2').text
