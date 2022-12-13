@@ -1,34 +1,27 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
+from selenium.webdriver.common.keys import Keys
+
 
 from data import *
+from testcase import *
 
 
-class Usecase2:
+class Usecase2(TestCase):
     def __init__(self, driver):
-        self.__driver = driver
-        self.__logged = False
+        pass
 
     def run_all_test(self):
         print('--------------------------------')
-        print('Run Decision Table Test:')
+        print('Run Usecase 2 Test:')
 
         self.setup_data()
-        self.test_1()
-        self.test_2()
-        self.test_3()
-        self.test_4()
-        self.test_5()
-        self.test_6()
-        self.test_7()
-        self.test_8()
-        self.test_9()
-        self.test_10()
-        self.test_11()
-        self.test_12()
+        # self.test_1()
 
         self.logout()
+        self.find_element(by=By.CLASS_NAME, value='asdas')
         print('--------------------------------')
 
     def test_1(self):
@@ -50,7 +43,7 @@ class Usecase2:
             print("Test 1: FAIL")
 
     def run_test(self, filter, sort):
-        if (not self.__logged):
+        if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'],
                        ADMIN_ACCOUNT['password'])
 
@@ -67,8 +60,54 @@ class Usecase2:
 
     def setup_data(self):
         # login
-        if (not self.__logged):
+        if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
+
+        # go to add user
+        site_admin_btn = self.find_element(
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]')
+        site_admin_btn.click()
+
+        users_btn = self.find_element(
+            by=By.LINK_TEXT, value='Users')
+        users_btn.click()
+
+        add_btn = self.find_element(
+            by=By.LINK_TEXT, value='Add a new user')
+        add_btn.click()
+
+        # add user
+        username_input = self.find_element(
+            by=By.NAME, value='username')
+        username_input.clear()
+        username_input.send_keys(USECASE2_DATA['account']['username'])
+
+        password_btn = self.find_element(
+            by=By.CSS_SELECTOR, value='.form-control[data-passwordunmask="edit"]')
+        password_btn.click()
+
+        newpassword_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.NAME, "newpassword")))
+        newpassword_input.clear()
+        newpassword_input.send_keys(USECASE2_DATA['account']['password'])
+
+        firstname_input = self.find_element(
+            by=By.NAME, value='firstname')
+        firstname_input.clear()
+        firstname_input.send_keys(USECASE2_DATA['account']['first name'])
+
+        lastname_input = self.find_element(
+            by=By.NAME, value='lastname')
+        lastname_input.clear()
+        lastname_input.send_keys(USECASE2_DATA['account']['surname'])
+
+        email_input = self.find_element(by=By.NAME, value='email')
+        email_input.clear()
+        email_input.send_keys(USECASE2_DATA['account']['email'])
+
+        submit_btn = self.find_element(
+            by=By.NAME, value='submitbutton')
+        submit_btn.click()
 
         # go to add course
         self.find_element(
@@ -78,160 +117,149 @@ class Usecase2:
 
         # add course
         self.find_element(by=By.ID, value='id_fullname').send_keys(
-            DECISION_TABLE_DATA['course']['full name'])
+            USECASE2_DATA['course']['full name'])
         self.find_element(by=By.ID, value='id_shortname').send_keys(
-            DECISION_TABLE_DATA['course']['short name'])
+            USECASE2_DATA['course']['short name'])
         self.find_element(by=By.NAME, value='saveanddisplay').click()
+
+        # go to course
         self.find_element(
             by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
+        try:
+            self.driver.implicitly_wait(2)
+            WebDriverWait(self.driver, 2).until(
+                EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'I understand')]"))).click()
+        except:
+            pass
         course = self.find_element(
-            by=By.XPATH, value="//span[contains(text(),'Môn 4')]")
+            by=By.XPATH, value="//span[contains(text(),'" + USECASE2_DATA['course']['full name'] + "')]")
         course.find_element(by=By.XPATH, value='..').click()
 
+        # turn on edit mode
         self.find_element(by=By.NAME, value='setmode').click()
         try:
-            WebDriverWait(self.__driver, 2).until(
+            self.driver.implicitly_wait(2)
+            WebDriverWait(self.driver, 2).until(
                 EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Skip tour')]"))).click()
         except:
             pass
 
-        # add event 1
+        topic = 1
+        # add quiz
+        for quiz in USECASE2_DATA['quizs']:
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='button[data-sectionid="'+str(topic)+'"]').click()
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='a[title="Add a new Quiz"]').click()
+            # input data
+            self.find_element(by=By.NAME, value='name').send_keys(
+                quiz['name'])
+
+            show_time = False
+            if 'open' in quiz:
+                if not show_time:
+                    time = self.find_element(
+                        by=By.ID, value='collapseElement-1')
+                    time.click()
+                    show_time = True
+                self.driver.implicitly_wait(2)
+                self.find_element(
+                    by=By.ID, value='id_timeopen_enabled').click()
+                self.find_element(
+                    by=By.ID, value='id_timeopen_day').send_keys(quiz['open']['day'])
+                self.find_element(
+                    by=By.ID, value='id_timeopen_month').send_keys(quiz['open']['month'])
+                self.find_element(
+                    by=By.ID, value='id_timeopen_year').send_keys(quiz['open']['year'])
+
+            if 'close' in quiz:
+                if not show_time:
+                    time = self.find_element(
+                        by=By.ID, value='collapseElement-1')
+                    time.click()
+                    show_time = True
+                self.driver.implicitly_wait(2)
+                self.find_element(
+                    by=By.ID, value='id_timeclose_enabled').click()
+                self.find_element(
+                    by=By.ID, value='id_timeclose_day').send_keys(quiz['close']['day'])
+                self.find_element(
+                    by=By.ID, value='id_timeclose_month').send_keys(quiz['close']['month'])
+                self.find_element(
+                    by=By.ID, value='id_timeclose_year').send_keys(quiz['close']['year'])
+
+            if 'attempt' in quiz:
+                grade = self.find_element(by=By.ID, value='collapseElement-2')
+                grade.click()
+                self.driver.implicitly_wait(2000)
+                grade_list = self.find_element(
+                    by=By.XPATH, value="//select[@name='attempts']")
+                grade_list.click()
+                Select(grade_list).select_by_value(str(quiz['attempt']))
+
+            self.find_element(
+                by=By.ID, value='id_submitbutton2').click()
+            topic += 1
+
+        # add question
+        quizs = [quiz['name'] for quiz in USECASE2_DATA['quizs']]
+        for quiz in quizs:
+
+            list_quiz = self.find_elements(by=By.LINK_TEXT, value=quiz)
+            list_quiz[-1].find_element(by=By.XPATH, value='..').click()
+
+            self.find_element(by=By.LINK_TEXT, value='Add question').click()
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='a[aria-label="Add"]').click()
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='a[data-action="addquestion"]').click()
+
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='input[value="truefalse"]').click()
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='input[name="submitbutton"]').click()
+            self.find_element(by=By.CSS_SELECTOR,
+                              value='input[name="name"]').send_keys(USECASE2_DATA['question']['name'])
+
+            self.find_element(by=By.ID,
+                              value='id_questiontexteditable').send_keys(USECASE2_DATA['question']['text'])
+
+            self.find_element(by=By.NAME,
+                              value='submitbutton').click()
+
+            self.find_element(by=By.LINK_TEXT,
+                              value='Môn 3').click()
+
+        # enrol user
+        self.find_element(by=By.LINK_TEXT, value='Participants').click()
         self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="1"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['overdue']['name'])
-        self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_day').send_keys(
-            DECISION_TABLE_DATA['overdue']['allow submission']['day'])
-        self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_month').send_keys(
-            DECISION_TABLE_DATA['overdue']['allow submission']['month'])
-        self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_year').send_keys(
-            DECISION_TABLE_DATA['overdue']['allow submission']['year'])
+                          value='input[value="Enrol users"]').click()
 
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['overdue']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['overdue']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['overdue']['due date']['year'])
-
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        # add event 2
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="2"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['7 dates']['name'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        # add event 3
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="3"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['30 dates']['name'])
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['30 dates']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['30 dates']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['30 dates']['due date']['year'])
-        self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-            DECISION_TABLE_DATA['30 dates']['remind']['day'])
-        self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-            DECISION_TABLE_DATA['30 dates']['remind']['month'])
-        self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-            DECISION_TABLE_DATA['30 dates']['remind']['year'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        # add event 4
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="4"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['3 months']['name'])
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['3 months']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['3 months']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['3 months']['due date']['year'])
-        self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-            DECISION_TABLE_DATA['3 months']['remind']['day'])
-        self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-            DECISION_TABLE_DATA['3 months']['remind']['month'])
-        self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-            DECISION_TABLE_DATA['3 months']['remind']['year'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        # add event 5
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='button[data-sectionid="4"]').click()
-        self.find_element(by=By.CSS_SELECTOR,
-                          value='a[title="Add a new Assignment"]').click()
-        # input data
-        self.find_element(by=By.NAME, value='name').send_keys(
-            DECISION_TABLE_DATA['6 months']['name'])
-        self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-            DECISION_TABLE_DATA['6 months']['due date']['day'])
-        self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-            DECISION_TABLE_DATA['6 months']['due date']['month'])
-        self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-            DECISION_TABLE_DATA['6 months']['due date']['year'])
-        self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-            DECISION_TABLE_DATA['6 months']['remind']['day'])
-        self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-            DECISION_TABLE_DATA['6 months']['remind']['month'])
-        self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-            DECISION_TABLE_DATA['6 months']['remind']['year'])
-        self.find_element(by=By.ID, value='id_submitbutton2').click()
-
-        self.reset()
-
-    def login(self, username, password):
-        login_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.login a')
-        login_btn.click()
-
-        username_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="username"]')
-        username_input.clear()
-        username_input.send_keys(username)
-
-        password_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="password"]')
-        password_input.clear()
-        password_input.send_keys(password)
-
-        login_btn = self.find_element(by=By.ID, value='loginbtn')
-        login_btn.click()
-        self.__logged = True
-
-    def logout(self):
+        search_input = self.find_element(
+            by=By.CSS_SELECTOR, value='.modal-content input[placeholder="Search"]')
+        search_input.send_keys(USECASE2_DATA['account']['email'])
         self.find_element(
-            By.CSS_SELECTOR, 'a[aria-label="User menu"]').click()
+            by=By.CSS_SELECTOR, value='.modal-content li').click()
 
-        self.find_element(By.LINK_TEXT, 'Log out').click()
+        self.find_element(by=By.CSS_SELECTOR,
+                          value='button[data-action="save"]').click()
+        self.find_element(by=By.CSS_SELECTOR,
+                          value='button[data-action="save"]').click()
+        self.logout()
+        self.login(USECASE2_DATA['account']['username'],
+                   USECASE2_DATA['account']['password'])
 
-        self.__logged = False
-
-    def reset(self):
+        # do quiz
         self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
-
-    def find_element(self, by, value):
-        return WebDriverWait(self.__driver, 50).until(
-            EC.presence_of_element_located((by, value)))
-
-    def find_elements(self, by, value):
-        return WebDriverWait(self.__driver, 2).until(
-            EC.presence_of_all_elements_located((by, value)))
+            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
+        course = self.find_element(
+            by=By.XPATH, value="//span[contains(text(),'" + USECASE2_DATA['course']['full name'] + "')]")
+        course.find_element(by=By.XPATH, value='..').click()
+        list_quiz = self.find_elements(by=By.LINK_TEXT, value=quizs[2])
+        list_quiz[-1].click()
+        self.find_elements(by=By.CSS_SELECTOR,
+                           value='button[type="submit"]').click()
+        self.find_elements(by=By.CSS_SELECTOR,
+                           value='input[type="submit"]').click()
+        self.find_elements(by=By.LINK_TEXT,
+                           value='Submit all and finish').click()

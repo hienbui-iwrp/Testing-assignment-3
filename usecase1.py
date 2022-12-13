@@ -5,12 +5,13 @@ from selenium.webdriver.common.keys import Keys
 
 
 from data import *
+from testcase import *
 
 
-class Usecase1:
+class Usecase1(TestCase):
     def __init__(self, driver):
-        self.__driver = driver
-        self.__logged = False
+        self.driver = driver
+        self.logged = False
 
     def run_all_test(self):
         print('--------------------------------')
@@ -26,7 +27,7 @@ class Usecase1:
 
     def test_1(self):
         try:
-            if (not self.__logged):
+            if (not self.logged):
                 self.login(ADMIN_ACCOUNT['username'],
                            ADMIN_ACCOUNT['password'])
 
@@ -54,7 +55,7 @@ class Usecase1:
 
     def test_2(self):
         try:
-            if (not self.__logged):
+            if (not self.logged):
                 self.login(ADMIN_ACCOUNT['username'],
                            ADMIN_ACCOUNT['password'])
 
@@ -75,7 +76,7 @@ class Usecase1:
 
     def test_3(self):
         try:
-            if (not self.__logged):
+            if (not self.logged):
                 self.login(ADMIN_ACCOUNT['username'],
                            ADMIN_ACCOUNT['password'])
 
@@ -97,7 +98,7 @@ class Usecase1:
 
     def setup_data(self):
         # login
-        if (not self.__logged):
+        if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
         for course in USECASE1_DATA:
@@ -116,42 +117,3 @@ class Usecase1:
             self.find_element(by=By.NAME, value='saveanddisplay').click()
 
         self.reset()
-
-    def login(self, username, password):
-        login_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.login a')
-        login_btn.click()
-
-        username_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="username"]')
-        username_input.clear()
-        username_input.send_keys(username)
-
-        password_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="password"]')
-        password_input.clear()
-        password_input.send_keys(password)
-
-        login_btn = self.find_element(by=By.ID, value='loginbtn')
-        login_btn.click()
-        self.__logged = True
-
-    def logout(self):
-        self.find_element(
-            By.CSS_SELECTOR, 'a[aria-label="User menu"]').click()
-
-        self.find_element(By.LINK_TEXT, 'Log out').click()
-
-        self.__logged = False
-
-    def reset(self):
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
-
-    def find_element(self, by, value):
-        return WebDriverWait(self.__driver, 50).until(
-            EC.presence_of_element_located((by, value)))
-
-    def find_elements(self, by, value):
-        return WebDriverWait(self.__driver, 2).until(
-            EC.presence_of_all_elements_located((by, value)))

@@ -3,12 +3,12 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from data import *
+from testcase import *
 
 
-class DecisionTable:
+class DecisionTable(TestCase):
     def __init__(self, driver):
-        self.__driver = driver
-        self.__logged = False
+        pass
 
     def run_all_test(self):
         print('--------------------------------')
@@ -293,9 +293,10 @@ class DecisionTable:
             by=By.XPATH, value="//span[contains(text(),'Môn 4')]")
         course.find_element(by=By.XPATH, value='..').click()
 
+        # turn on edit mode
         self.find_element(by=By.NAME, value='setmode').click()
         try:
-            WebDriverWait(self.__driver, 2).until(
+            WebDriverWait(self.driver, 2).until(
                 EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Skip tour')]"))).click()
         except:
             pass
@@ -401,47 +402,3 @@ class DecisionTable:
         self.find_element(by=By.ID, value='id_submitbutton2').click()
 
         self.reset()
-
-    def login(self, username, password):
-        login_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.login a')
-        login_btn.click()
-
-        username_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="username"]')
-        username_input.clear()
-        username_input.send_keys(username)
-
-        password_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="password"]')
-        password_input.clear()
-        password_input.send_keys(password)
-
-        login_btn = self.find_element(by=By.ID, value='loginbtn')
-        login_btn.click()
-        self.__logged = True
-
-    def logout(self):
-        self.find_element(
-            By.CSS_SELECTOR, 'a[aria-label="User menu"]').click()
-
-        self.find_element(By.LINK_TEXT, 'Log out').click()
-
-        self.__logged = False
-
-    def reset(self):
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
-
-    def find_element(self, by, value):
-        return WebDriverWait(self.__driver, 1).until(
-            EC.presence_of_element_located((by, value)))
-
-    def find_elements(self, by, value):
-        WebDriverWait(self.__driver, 1).until(
-            EC.visibility_of_element_located((by, value)))
-
-        elements = self.__driver.find_elements(
-            by, value)
-
-        return [element for element in elements]

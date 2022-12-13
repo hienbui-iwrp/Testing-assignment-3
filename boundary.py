@@ -3,12 +3,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from data import *
+from testcase import *
 
 
-class Boundary:
+class Boundary(TestCase):
     def __init__(self, driver):
-        self.__driver = driver
-        self.__logged = False
+        super().__init__(driver)
+        print(self.logged)
 
     def run_all_test(self):
         print('--------------------------------')
@@ -28,7 +29,7 @@ class Boundary:
     def test_1(self):
         try:
             self.run_test(BOUNDARY_TESTCASE['test 1'])
-            message = WebDriverWait(self.__driver, 10).until(
+            message = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
             assert BOUNDARY_EXPECT['test 1'] in message.text
@@ -42,7 +43,7 @@ class Boundary:
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 2'])
             if (current != BOUNDARY_TESTCASE['test 2']):
-                message = WebDriverWait(self.__driver, 10).until(
+                message = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
                 assert BOUNDARY_EXPECT['test 2'] in message.text
@@ -56,7 +57,7 @@ class Boundary:
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 3'])
             if (current != BOUNDARY_TESTCASE['test 3']):
-                message = WebDriverWait(self.__driver, 10).until(
+                message = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
                 assert BOUNDARY_EXPECT['test 3'] in message.text
@@ -70,7 +71,7 @@ class Boundary:
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 4'])
             if (current != BOUNDARY_TESTCASE['test 4']):
-                message = WebDriverWait(self.__driver, 10).until(
+                message = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
                 assert BOUNDARY_EXPECT['test 4'] in message.text
@@ -84,7 +85,7 @@ class Boundary:
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 5'])
             if (current != BOUNDARY_TESTCASE['test 5']):
-                message = WebDriverWait(self.__driver, 10).until(
+                message = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
                 assert BOUNDARY_EXPECT['test 5'] in message.text
@@ -98,7 +99,7 @@ class Boundary:
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 6'])
             if (current != BOUNDARY_TESTCASE['test 6']):
-                message = WebDriverWait(self.__driver, 10).until(
+                message = WebDriverWait(self.driver, 10).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
                 assert BOUNDARY_EXPECT['test 6'] in message.text
@@ -112,7 +113,7 @@ class Boundary:
     def test_7(self):
         try:
             self.run_test(BOUNDARY_TESTCASE['test 7'])
-            message = WebDriverWait(self.__driver, 10).until(
+            message = WebDriverWait(self.driver, 10).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
 
             assert BOUNDARY_EXPECT['test 7'] in message.text
@@ -124,24 +125,8 @@ class Boundary:
 
     def run_test(self, max):
         # login
-        if (not self.__logged):
-            login_btn = self.find_element(
-                by=By.CSS_SELECTOR, value='.login a')
-            login_btn.click()
-
-            username_input = self.find_element(
-                by=By.CSS_SELECTOR, value='input[name="username"]')
-            username_input.clear()
-            username_input.send_keys(ADMIN_ACCOUNT['username'])
-
-            password_input = self.find_element(
-                by=By.CSS_SELECTOR, value='input[name="password"]')
-            password_input.clear()
-            password_input.send_keys(ADMIN_ACCOUNT['password'])
-
-            login_btn = self.find_element(by=By.ID, value='loginbtn')
-            login_btn.click()
-            self.__logged = True
+        if (not self.logged):
+            self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
         # run test
         self.find_element(
@@ -168,19 +153,3 @@ class Boundary:
             by=By.CSS_SELECTOR, value='.row button').click()
 
         return current
-
-    def logout(self):
-        self.find_element(
-            By.CSS_SELECTOR, 'a[aria-label="User menu"]').click()
-
-        self.find_element(By.LINK_TEXT, 'Log out').click()
-
-        self.__logged = False
-
-    def reset(self):
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
-
-    def find_element(self, by, value):
-        return WebDriverWait(self.__driver, 5).until(
-            EC.presence_of_element_located((by, value)))

@@ -3,12 +3,13 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 from data import *
+from testcase import *
 
 
-class EquivalentClass:
+class EquivalentClass(TestCase):
     def __init__(self, driver):
-        self.__driver = driver
-        self.__logged = False
+        self.driver = driver
+        self.logged = False
 
     def run_all_test(self):
         print('--------------------------------')
@@ -118,7 +119,7 @@ class EquivalentClass:
         self.reset()
 
     def run_test(self, current, new_password, confirm):
-        if (not self.__logged):
+        if (not self.logged):
             self.login(EQUIVALENT_CLASS_DATA['username'],
                        EQUIVALENT_CLASS_DATA['password'])
 
@@ -139,9 +140,10 @@ class EquivalentClass:
 
     def setup_data(self):
         # login
-        if (not self.__logged):
+        if (not self.logged):
             self.login(ADMIN_ACCOUNT['username'], ADMIN_ACCOUNT['password'])
 
+        # go to add user
         site_admin_btn = self.find_element(
             by=By.CSS_SELECTOR, value='a[href="http://localhost/admin/search.php"]')
         site_admin_btn.click()
@@ -154,6 +156,7 @@ class EquivalentClass:
             by=By.LINK_TEXT, value='Add a new user')
         add_btn.click()
 
+        # add user
         username_input = self.find_element(
             by=By.NAME, value='username')
         username_input.clear()
@@ -163,7 +166,7 @@ class EquivalentClass:
             by=By.CSS_SELECTOR, value='.form-control[data-passwordunmask="edit"]')
         password_btn.click()
 
-        newpassword_input = WebDriverWait(self.__driver, 10).until(
+        newpassword_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.NAME, "newpassword")))
         newpassword_input.clear()
         newpassword_input.send_keys(EQUIVALENT_CLASS_DATA['password'])
@@ -187,38 +190,3 @@ class EquivalentClass:
         submit_btn.click()
 
         self.logout()
-
-    def login(self, username, password):
-        login_btn = self.find_element(
-            by=By.CSS_SELECTOR, value='.login a')
-        login_btn.click()
-
-        username_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="username"]')
-        username_input.clear()
-        username_input.send_keys(username)
-
-        password_input = self.find_element(
-            by=By.CSS_SELECTOR, value='input[name="password"]')
-        password_input.clear()
-        password_input.send_keys(password)
-
-        login_btn = self.find_element(by=By.ID, value='loginbtn')
-        login_btn.click()
-        self.__logged = True
-
-    def logout(self):
-        self.find_element(
-            By.CSS_SELECTOR, 'a[aria-label="User menu"]').click()
-
-        self.find_element(By.LINK_TEXT, 'Log out').click()
-
-        self.__logged = False
-
-    def reset(self):
-        self.find_element(
-            by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
-
-    def find_element(self, by, value):
-        return WebDriverWait(self.__driver, 5).until(
-            EC.presence_of_element_located((by, value)))
