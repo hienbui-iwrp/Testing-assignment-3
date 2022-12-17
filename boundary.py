@@ -1,6 +1,4 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from data import *
 from testcase import *
@@ -28,8 +26,7 @@ class Boundary(TestCase):
     def test_1(self):
         try:
             self.run_test(BOUNDARY_TESTCASE['test 1'])
-            message = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
+            message = self.find_element(By.CSS_SELECTOR, ".alert")
 
             assert BOUNDARY_EXPECT['test 1'] in message.text
 
@@ -42,8 +39,7 @@ class Boundary(TestCase):
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 2'])
             if (current != BOUNDARY_TESTCASE['test 2']):
-                message = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
+                message = self.find_element(By.CSS_SELECTOR, ".alert")
 
                 assert BOUNDARY_EXPECT['test 2'] in message.text
 
@@ -56,8 +52,7 @@ class Boundary(TestCase):
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 3'])
             if (current != BOUNDARY_TESTCASE['test 3']):
-                message = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
+                message = self.find_element(By.CSS_SELECTOR, ".alert")
 
                 assert BOUNDARY_EXPECT['test 3'] in message.text
 
@@ -70,8 +65,7 @@ class Boundary(TestCase):
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 4'])
             if (current != BOUNDARY_TESTCASE['test 4']):
-                message = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
+                message = self.find_element(By.CSS_SELECTOR, ".alert")
 
                 assert BOUNDARY_EXPECT['test 4'] in message.text
 
@@ -84,8 +78,7 @@ class Boundary(TestCase):
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 5'])
             if (current != BOUNDARY_TESTCASE['test 5']):
-                message = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
+                message = self.find_element(By.CSS_SELECTOR, ".alert")
 
                 assert BOUNDARY_EXPECT['test 5'] in message.text
 
@@ -98,8 +91,7 @@ class Boundary(TestCase):
         try:
             current = self.run_test(BOUNDARY_TESTCASE['test 6'])
             if (current != BOUNDARY_TESTCASE['test 6']):
-                message = WebDriverWait(self.driver, 10).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
+                message = self.find_element(By.CSS_SELECTOR, ".alert")
 
                 assert BOUNDARY_EXPECT['test 6'] in message.text
 
@@ -112,9 +104,7 @@ class Boundary(TestCase):
     def test_7(self):
         try:
             self.run_test(BOUNDARY_TESTCASE['test 7'])
-            message = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located((By.CSS_SELECTOR, ".alert")))
-
+            message = self.find_element(By.CSS_SELECTOR, ".alert")
             assert BOUNDARY_EXPECT['test 7'] in message.text
 
             print("Test 7: PASS")

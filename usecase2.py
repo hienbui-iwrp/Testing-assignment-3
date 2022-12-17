@@ -1,8 +1,4 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.common.keys import Keys
 
 
 from data import *
@@ -119,45 +115,48 @@ class Usecase2(TestCase):
 
             show_time = False
             if 'open' in quiz:
+                self.wait(1)
                 if not show_time:
                     time = self.find_element(
                         by=By.ID, value='collapseElement-1')
                     time.click()
                     show_time = True
-                self.driver.implicitly_wait(2)
+
+                self.wait(1)
                 self.find_element(
                     by=By.ID, value='id_timeopen_enabled').click()
-                self.find_element(
-                    by=By.ID, value='id_timeopen_day').send_keys(quiz['open']['day'])
-                self.find_element(
-                    by=By.ID, value='id_timeopen_month').send_keys(quiz['open']['month'])
-                self.find_element(
-                    by=By.ID, value='id_timeopen_year').send_keys(quiz['open']['year'])
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_timeopen_day'), str(quiz['open']['day']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_timeopen_month'), str(quiz['open']['month']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_timeopen_year'), str(quiz['open']['year']))
 
             if 'close' in quiz:
+                self.wait(1)
                 if not show_time:
                     time = self.find_element(
                         by=By.ID, value='collapseElement-1')
                     time.click()
                     show_time = True
-                self.driver.implicitly_wait(2)
+                self.wait(1)
                 self.find_element(
                     by=By.ID, value='id_timeclose_enabled').click()
-                self.find_element(
-                    by=By.ID, value='id_timeclose_day').send_keys(quiz['close']['day'])
-                self.find_element(
-                    by=By.ID, value='id_timeclose_month').send_keys(quiz['close']['month'])
-                self.find_element(
-                    by=By.ID, value='id_timeclose_year').send_keys(quiz['close']['year'])
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_timeclose_day'), str(quiz['close']['day']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_timeclose_month'), str(quiz['close']['month']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_timeclose_year'), str(quiz['close']['year']))
 
             if 'attempt' in quiz:
+                self.wait(1)
                 grade = self.find_element(by=By.ID, value='collapseElement-2')
                 grade.click()
-                self.driver.implicitly_wait(2000)
+                self.wait(1)
                 grade_list = self.find_element(
                     by=By.XPATH, value="//select[@name='attempts']")
-                grade_list.click()
-                Select(grade_list).select_by_value(str(quiz['attempt']))
+                self.select_key(grade_list, str(quiz['attempt']))
 
             self.find_element(
                 by=By.ID, value='id_submitbutton2').click()
@@ -199,6 +198,7 @@ class Usecase2(TestCase):
         search_input = self.find_element(
             by=By.CSS_SELECTOR, value='.modal-content input[placeholder="Search"]')
         search_input.send_keys(USECASE2_DATA['account']['email'])
+        self.wait(1)
         try:
             self.find_element(
                 by=By.CSS_SELECTOR, value='.modal-content li').click()
@@ -216,6 +216,7 @@ class Usecase2(TestCase):
 
         # do quiz
         self.go_to_course(USECASE2_DATA['course']['full name'])
+        print('done')
         list_quiz = self.find_elements(by=By.LINK_TEXT, value=quizs[1])
 
         list_quiz[-1].find_element(By.XPATH, '..').click()

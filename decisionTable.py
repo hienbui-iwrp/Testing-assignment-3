@@ -1,6 +1,4 @@
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
 from data import *
 from testcase import *
@@ -292,28 +290,30 @@ class DecisionTable(TestCase):
             self.find_element(by=By.NAME, value='name').send_keys(
                 event['name'])
             if 'allow submission' in event:
-                self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_day').send_keys(
-                    event['allow submission']['day'])
-                self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_month').send_keys(
-                    event['allow submission']['month'])
-                self.find_element(by=By.ID, value='id_allowsubmissionsfromdate_year').send_keys(
-                    event['allow submission']['year'])
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_allowsubmissionsfromdate_day'), str(event['allow submission']['day']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_allowsubmissionsfromdate_month'), str(event['allow submission']['month']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_allowsubmissionsfromdate_year'), str(event['allow submission']['year']))
 
             if 'due date' in event:
-                self.find_element(by=By.ID, value='id_duedate_day').send_keys(
-                    event['due date']['day'])
-                self.find_element(by=By.ID, value='id_duedate_month').send_keys(
-                    event['due date']['month'])
-                self.find_element(by=By.ID, value='id_duedate_year').send_keys(
-                    event['due date']['year'])
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_duedate_day'), str(event['due date']['day']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_duedate_month'), str(event['due date']['month']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_duedate_year'), str(event['due date']['year']))
+
+            # self.wait(100)
 
             if 'remind' in event:
-                self.find_element(by=By.ID, value='id_gradingduedate_day').send_keys(
-                    event['remind']['day'])
-                self.find_element(by=By.ID, value='id_gradingduedate_month').send_keys(
-                    event['remind']['month'])
-                self.find_element(by=By.ID, value='id_gradingduedate_year').send_keys(
-                    event['remind']['year'])
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_gradingduedate_day'), str(event['remind']['day']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_gradingduedate_month'), str(event['remind']['month']))
+                self.select_key(self.find_element(
+                    by=By.ID, value='id_gradingduedate_year'), str(event['remind']['year']))
 
             self.find_element(by=By.ID, value='id_submitbutton2').click()
 

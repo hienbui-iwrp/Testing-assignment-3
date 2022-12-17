@@ -24,6 +24,7 @@ BOUNDARY_EXPECT = {
     'test 7': 'Some settings were not changed due to an error.',
 }
 
+
 # equivalent classs
 EQUIVALENT_CLASS_DATA = {
     'username': 'taikhoan.1',
@@ -144,7 +145,6 @@ USECASE1_EXPECT = {
 
 
 # usecase 2
-
 USECASE2_DATA = {
     'account': {
         'username': 'taikhoan.2',

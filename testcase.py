@@ -1,6 +1,7 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import Select
 
 
 class TestCase:
@@ -28,8 +29,8 @@ class TestCase:
         login_btn.click()
         self.logged = True
 
+        self.wait(1)
         try:
-            self.driver.implicitly_wait(1)
             WebDriverWait(self.driver, 1).until(
                 EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Got it')]"))).click()
         except:
@@ -38,7 +39,7 @@ class TestCase:
     def logout(self):
         self.find_element(
             By.CSS_SELECTOR, 'a[aria-label="User menu"]').click()
-
+        self.wait(1)
         self.find_element(By.LINK_TEXT, 'Log out').click()
 
         self.logged = False
@@ -46,8 +47,8 @@ class TestCase:
     def go_to_course(self, name, editmode=False):
         self.find_element(
             by=By.CSS_SELECTOR, value='a[href="http://localhost/my/courses.php"]').click()
+        self.wait(1)
         try:
-            self.driver.implicitly_wait(1)
             WebDriverWait(self.driver, 1).until(
                 EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'I understand')]"))).click()
         except:
@@ -55,18 +56,27 @@ class TestCase:
         course = self.find_element(
             by=By.XPATH, value="//span[contains(text(),'" + name + "')]")
         course.find_element(by=By.XPATH, value='..').click()
+        self.wait(1)
         try:
-            WebDriverWait(self.driver, 2).until(
+            WebDriverWait(self.driver, 1).until(
                 EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Got it')]"))).click()
         except:
             pass
+
+        self.wait(1)
+        try:
+            WebDriverWait(self.driver, 1).until(
+                EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Skip tour')]"))).click()
+        except:
+            pass
         if (editmode):
-            self.find_element(by=By.NAME, value='setmode').click()
+            self.wait(1)
             try:
-                WebDriverWait(self.driver, 2).until(
+                WebDriverWait(self.driver, 1).until(
                     EC.presence_of_element_located((By.XPATH, "//button[contains(text(),'Skip tour')]"))).click()
             except:
                 pass
+            self.find_element(by=By.NAME, value='setmode').click()
 
     def add_user(self, username, password, firstname, surname, email):
         site_admin_btn = self.find_element(
@@ -130,11 +140,11 @@ class TestCase:
             by=By.CSS_SELECTOR, value='a[href="http://localhost/my/"]').click()
 
     def find_element(self, by, value):
-        return WebDriverWait(self.driver, 1).until(
+        return WebDriverWait(self.driver, 5).until(
             EC.presence_of_element_located((by, value)))
 
     def find_elements(self, by, value):
-        WebDriverWait(self.driver, 1).until(
+        WebDriverWait(self.driver, 5).until(
             EC.visibility_of_element_located((by, value)))
 
         elements = self.driver.find_elements(
@@ -148,3 +158,6 @@ class TestCase:
                 EC.presence_of_element_located((By.CSS_SELECTOR, 'wait')))
         except:
             pass
+
+    def select_key(self, element, value):
+        Select(element).select_by_value(value)
