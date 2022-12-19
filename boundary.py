@@ -1,4 +1,7 @@
 from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
 
 from data import *
 from testcase import *
@@ -12,6 +15,7 @@ class Boundary(TestCase):
         print('--------------------------------')
         print('Run Boundary Test:')
 
+        # run test
         self.test_1()
         self.test_2()
         self.test_3()
@@ -142,3 +146,16 @@ class Boundary(TestCase):
             by=By.CSS_SELECTOR, value='.row button').click()
 
         return current
+
+
+# setup
+service = ChromeService(executable_path='./chromedriver.exe')
+# driver = webdriver.Chrome(service=service)
+options = Options()
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(service=service, chrome_options=options)
+
+# run test
+testcase = Boundary(driver)
+driver.get("http://localhost/")
+testcase.run_all_test()

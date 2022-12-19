@@ -1,5 +1,8 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
 
 
 from data import *
@@ -13,8 +16,9 @@ class Usecase1(TestCase):
     def run_all_test(self):
         print('--------------------------------')
         print('Run Usecase 1 Test:')
-
         self.setup_data()
+
+        # run test
         self.path_1()
         self.path_2()
         self.path_3()
@@ -98,3 +102,16 @@ class Usecase1(TestCase):
                 USECASE1_DATA[course]['full name'], USECASE1_DATA[course]['short name'])
 
         self.reset()
+
+
+# setup
+service = ChromeService(executable_path='./chromedriver.exe')
+# driver = webdriver.Chrome(service=service)
+options = Options()
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(service=service, chrome_options=options)
+
+# run test
+testcase = Usecase1(driver)
+driver.get("http://localhost/")
+testcase.run_all_test()

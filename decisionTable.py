@@ -1,4 +1,7 @@
 from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
 
 from data import *
 from testcase import *
@@ -11,8 +14,9 @@ class DecisionTable(TestCase):
     def run_all_test(self):
         print('--------------------------------')
         print('Run Decision Table Test:')
-
         self.setup_data()
+
+        # run test
         self.test_1()
         self.test_2()
         self.test_3()
@@ -318,3 +322,16 @@ class DecisionTable(TestCase):
             self.find_element(by=By.ID, value='id_submitbutton2').click()
 
         self.reset()
+
+
+# setup
+service = ChromeService(executable_path='./chromedriver.exe')
+# driver = webdriver.Chrome(service=service)
+options = Options()
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(service=service, chrome_options=options)
+
+# run test
+testcase = DecisionTable(driver)
+driver.get("http://localhost/")
+testcase.run_all_test()

@@ -1,5 +1,7 @@
 from selenium.webdriver.common.by import By
-
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
 
 from data import *
 from testcase import *
@@ -12,8 +14,8 @@ class Usecase2(TestCase):
     def run_all_test(self):
         print('--------------------------------')
         print('Run Usecase 2 Test:')
-
         self.setup_data()
+        # run test
         self.path_1()
         self.path_2()
         self.path_3()
@@ -216,7 +218,6 @@ class Usecase2(TestCase):
 
         # do quiz
         self.go_to_course(USECASE2_DATA['course']['full name'])
-        print('done')
         list_quiz = self.find_elements(by=By.LINK_TEXT, value=quizs[1])
 
         list_quiz[-1].find_element(By.XPATH, '..').click()
@@ -230,3 +231,16 @@ class Usecase2(TestCase):
                           value='input[value="Submit all and finish"]').click()
 
         self.logout()
+
+
+# setup
+service = ChromeService(executable_path='./chromedriver.exe')
+# driver = webdriver.Chrome(service=service)
+options = Options()
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(service=service, chrome_options=options)
+
+# run test
+testcase = Usecase2(driver)
+driver.get("http://localhost/")
+testcase.run_all_test()

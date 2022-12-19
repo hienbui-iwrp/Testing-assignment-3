@@ -35,20 +35,34 @@ EQUIVALENT_CLASS_DATA = {
 }
 
 EQUIVALENT_CLASS_TESTCASE = {
-    'test 1': {'current': 'Matkhau',
-               'new password': 'Matkhau.2', 'confirm': 'Matkhau.2'},
-    'test 2': {'current': 'Matkhau.1',
-               'new password': 'Matkhau.', 'confirm': 'Matkhau.'},
-    'test 3': {'current': 'Matkhau.1',
-                          'new password': 'Matkhau1', 'confirm': 'Matkhau1'},
-    'test 4': {'current': 'Matkhau.1',
-                          'new password': 'MATKHAU.1', 'confirm': 'MATKHAU.1'},
-    'test 5': {'current': 'Matkhau.1',
-                          'new password': 'matkhau.1', 'confirm': 'matkhau.1'},
-    'test 6': {'current': 'Matkhau.1',
-                          'new password': '123456', 'confirm': '123456'},
-    'test 7': {'current': 'Matkhau.1',
-               'new password': 'mMatkhau.2', 'confirm': 'Matkhau'},
+    'test 1': {
+        'current': 'Matkhau',
+        'new password': 'Matkhau.2',
+        'confirm': 'Matkhau.2'},
+    'test 2': {
+        'current': 'Matkhau.1',
+        'new password': 'Matkhau.',
+        'confirm': 'Matkhau.'},
+    'test 3': {
+        'current': 'Matkhau.1',
+        'new password': 'Matkhau1',
+        'confirm': 'Matkhau1'},
+    'test 4': {
+        'current': 'Matkhau.1',
+        'new password': 'MATKHAU.1',
+        'confirm': 'MATKHAU.1'},
+    'test 5': {
+        'current': 'Matkhau.1',
+        'new password': 'matkhau.1',
+        'confirm': 'matkhau.1'},
+    'test 6': {
+        'current': 'Matkhau.1',
+        'new password': '123456',
+        'confirm': '123456'},
+    'test 7': {
+        'current': 'Matkhau.1',
+        'new password': 'mMatkhau.2',
+        'confirm': 'Matkhau'},
 }
 
 EQUIVALENT_CLASS_EXCEPT = {

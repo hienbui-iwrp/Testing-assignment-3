@@ -1,4 +1,7 @@
 from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
 
 from data import *
 from testcase import *
@@ -13,6 +16,7 @@ class EquivalentClass(TestCase):
         print('Run Equivalent Class Test:')
 
         self.setup_data()
+        # run test
         self.test_1()
         self.test_2()
         self.test_3()
@@ -144,3 +148,14 @@ class EquivalentClass(TestCase):
         self.add_user(EQUIVALENT_CLASS_DATA['username'],
                       EQUIVALENT_CLASS_DATA['password'], EQUIVALENT_CLASS_DATA['first name'], EQUIVALENT_CLASS_DATA['surname'], EQUIVALENT_CLASS_DATA['email'])
         self.logout()
+
+
+service = ChromeService(executable_path='./chromedriver.exe')
+# driver = webdriver.Chrome(service=service)
+options = Options()
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(service=service, chrome_options=options)
+
+testcase = EquivalentClass(driver)
+driver.get("http://localhost/")
+testcase.run_all_test()
