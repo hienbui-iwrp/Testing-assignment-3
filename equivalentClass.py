@@ -157,5 +157,5 @@ options.add_experimental_option('excludeSwitches', ['enable-logging'])
 driver = webdriver.Chrome(service=service, chrome_options=options)
 
 testcase = EquivalentClass(driver)
-driver.get("http://localhost/")
+driver.get('http://localhost/?lang=en')
 testcase.run_all_test()

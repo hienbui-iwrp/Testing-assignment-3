@@ -24,7 +24,7 @@ decisionTable = DecisionTable(driver)
 usecase1 = Usecase1(driver)
 usecase2 = Usecase2(driver)
 
-driver.get("http://localhost/")
+driver.get('http://localhost/?lang=en')
 
 # run
 boundary.run_all_test()
