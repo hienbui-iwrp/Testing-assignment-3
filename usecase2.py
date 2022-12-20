@@ -237,7 +237,7 @@ service = ChromeService(executable_path='./chromedriver.exe')
 # driver = webdriver.Chrome(service=service)
 options = Options()
 options.add_experimental_option('excludeSwitches', ['enable-logging'])
-driver = webdriver.Chrome(service=service, chrome_options=options)
+driver = webdriver.Chrome(service=service, options=options)
 
 # run test
 testcase = Usecase2(driver)
