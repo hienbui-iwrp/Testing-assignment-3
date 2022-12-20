@@ -25,7 +25,6 @@ class EquivalentClass(TestCase):
         self.test_6()
         self.test_7()
 
-        self.logout()
         print('--------------------------------')
 
     def test_1(self):

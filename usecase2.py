@@ -21,7 +21,6 @@ class Usecase2(TestCase):
         self.path_3()
         self.path_4()
 
-        self.logout()
         print('--------------------------------')
 
     def path_1(self):

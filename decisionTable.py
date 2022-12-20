@@ -30,7 +30,6 @@ class DecisionTable(TestCase):
         self.test_11()
         self.test_12()
 
-        self.logout()
         print('--------------------------------')
 
     def test_1(self):
